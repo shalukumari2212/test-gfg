@@ -1,26 +1,36 @@
 
 
 class Solution {
-    static Map<Node,Integer> dp;
-    
     public int level(Node root){
         if(root==null) return 0;
-        if(dp.containsKey(root)) return dp.get(root);
-        int left= level(root.left);
-        int right= level(root.right);
-        dp.put(root,1+ Math.max(right,left));
-        return dp.get(root);
-        
+        int leftans= level(root.left);
+        int rightans= level(root.right);
+        return 1+ Math.max(leftans,rightans);
     }
-    public int dia(Node root) {
+    public int height(Node root){
+        if(root==null || root.left==null && root.right==null) return 0;
+        int leftans= height(root.left);
+        int rightans= height(root.right);
+        return 1+ Math.max(leftans,rightans);
+    }
+    public int diameterLevel(Node root) {
         if(root==null) return 0;
-        int mid= level(root.right) + level(root.left);
-        int left= dia(root.left);
-        int right= dia(root.right);
-        return Math.max(mid ,Math.max(right,left));
+        int mid= level(root.left) + level(root.left);
+        int right = diameterLevel(root.left);
+        int left = diameterLevel(root.right);
+        return Math.max(mid,Math.max(left,right)); 
     }
+    public int diameterheight(Node root) {
+        if(root==null || root.left==null && root.right==null) return 0;
+        int mid=height(root.left) + height(root.right);
+        if(root.left != null) mid++;
+        if(root.right != null) mid++;
+        int right = diameterheight(root.left);
+        int left = diameterheight(root.right);
+        return Math.max(mid,Math.max(left,right)); 
+    }
+    
     public int diameter(Node root) {
-        dp= new HashMap<>();
-        return dia(root);
+        return diameterheight(root);
     }
 }
